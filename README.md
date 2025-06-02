@@ -14,4 +14,5 @@ a simple cli depth of field calculator for photography and videography
 | | |
 |:---|:---:|
 | source | ✅ |
+| cargo | ❌ |
 | nixpkgs | ❌ |
