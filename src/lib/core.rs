@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use lazy_static::lazy_static;
 use std::fmt;
 /*
 c  = d/1730
@@ -16,6 +17,16 @@ N  = fstop                                   [-]
 d  = diagonal of the sensor/print            [mm]
 c  = circle of confusion                     [mm]
 */
+
+lazy_static! {
+    pub static ref DEFAULT_LENS: Lens = Lens {
+        name: "".to_string(),
+        focal_length: 50.,
+        focus_distance: 1.,
+        fstop: 1.4,
+        format: Format::FF135,
+    };
+}
 
 fn pythagorean(l1: f32, l2: f32) -> f32 {
     (l1 * l1 + l2 * l2).sqrt()
