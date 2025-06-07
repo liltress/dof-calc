@@ -19,9 +19,10 @@ c  = circle of confusion                     [mm]
 */
 
 lazy_static! {
+    #[derive(Debug)]
     pub static ref DEFAULT_LENS: Lens = Lens {
-        name: "".to_string(),
-        focal_length: 50.,
+        name: "default lens".to_string(),
+        focal_length: 50./1000.,
         focus_distance: 1.,
         fstop: 1.4,
         format: Format::FF135,
@@ -64,15 +65,6 @@ pub struct Lens {
     pub format: Format,
 }
 impl Lens {
-    pub fn new(fl: f32, fd: f32, f: f32, fr: Format) -> Lens {
-        Lens {
-            name: "-".to_string(),
-            focal_length: fl,
-            focus_distance: fd,
-            fstop: f,
-            format: fr,
-        }
-    }
     fn get_circle_of_confusion(&self) -> f32 {
         self.format.get_diagonal() / 1730.
     }
@@ -93,15 +85,6 @@ impl Lens {
     }
     pub fn infinity_in_focus(&self) -> bool {
         self.get_field_of_focus().1 >= self.get_hyperfocal_distance()
-    }
-    pub fn get_focal_length(&self) -> f32 {
-        self.focal_length
-    }
-    pub fn get_focus_distance(&self) -> f32 {
-        self.focal_length
-    }
-    pub fn get_fstop(&self) -> f32 {
-        self.fstop
     }
 }
 impl fmt::Display for Lens {

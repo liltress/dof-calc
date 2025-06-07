@@ -2,8 +2,8 @@ use crate::lib::core::Lens;
 use std::fmt::{self};
 use textwrap;
 
-const LEFT_BORDER: &str = "<<";
-const RIGHT_BORDER: &str = ">>";
+const LEFT_BORDER: &str = "| ";
+const RIGHT_BORDER: &str = " |";
 const HORZ_BORDER: &str = "-";
 
 #[derive(Debug)]
@@ -28,12 +28,13 @@ fn format_paragraph(text: &str, text_width: usize) -> String {
 }
 
 fn display_specs(lens: &Lens, text_width: usize) -> String {
+    //! TODO refactor this
     format!(
         "\n{}Lens Name: {: <w$}{}",
         LEFT_BORDER,
         lens.name,
         RIGHT_BORDER,
-        w = text_width - lens.name.len() - 1
+        w = text_width - 12
     ) + &format!(
         "\n{}Focal Length: {}mm{: >w$}",
         LEFT_BORDER,
@@ -45,13 +46,13 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
         LEFT_BORDER,
         lens.fstop,
         RIGHT_BORDER,
-        w = text_width - lens.fstop.to_string().len() - 5
+        w = text_width - 8
     ) + &format!(
         "\n{}Focused to: {:.1}m{: >w$}",
         LEFT_BORDER,
         lens.focus_distance,
         RIGHT_BORDER,
-        w = text_width - lens.focus_distance.to_string().len() - 12
+        w = text_width - 3 - 12
     )
 }
 
