@@ -11,8 +11,8 @@ fn main() {
     let lens = Lens {
         name: "placeholder".to_string(),
         focal_length: 50.0 / 1000.,
-        focus_distance: 1.0,
-        fstop: 16.,
+        focus_distance: 1.5,
+        fstop: 1.4,
         format: lib::core::Format::FF135,
     };
     dbg!(&args);
@@ -23,7 +23,7 @@ fn main() {
         lib::menu::MenuItem::Paragraph(lorem_ipsum),
         lib::menu::MenuItem::Blank,
         lib::menu::MenuItem::SpecList(&lens),
-        lib::menu::MenuItem::Scale(&lens),
+        lib::menu::MenuItem::Blank,
         lib::menu::MenuItem::Bar,
     ]
     .iter()

@@ -2,8 +2,8 @@ use crate::lib::core::Lens;
 use std::fmt::{self};
 use textwrap;
 
-const LEFT_BORDER: &str = "| ";
-const RIGHT_BORDER: &str = " |";
+const LEFT_BORDER: &str = "<<";
+const RIGHT_BORDER: &str = ">>";
 const HORZ_BORDER: &str = "-";
 
 #[derive(Debug)]
@@ -27,6 +27,34 @@ fn format_paragraph(text: &str, text_width: usize) -> String {
     textout
 }
 
+fn display_specs(lens: &Lens, text_width: usize) -> String {
+    format!(
+        "\n{}Lens Name: {: <w$}{}",
+        LEFT_BORDER,
+        lens.name,
+        RIGHT_BORDER,
+        w = text_width - lens.name.len() - 1
+    ) + &format!(
+        "\n{}Focal Length: {}mm{: >w$}",
+        LEFT_BORDER,
+        lens.focal_length * 1000.,
+        RIGHT_BORDER,
+        w = text_width - (lens.focal_length * 1000.).to_string().len() - 15
+    ) + &format!(
+        "\n{}FStop: {: <w$}{}",
+        LEFT_BORDER,
+        lens.fstop,
+        RIGHT_BORDER,
+        w = text_width - lens.fstop.to_string().len() - 5
+    ) + &format!(
+        "\n{}Focused to: {:.1}m{: >w$}",
+        LEFT_BORDER,
+        lens.focus_distance,
+        RIGHT_BORDER,
+        w = text_width - lens.focus_distance.to_string().len() - 12
+    )
+}
+
 impl fmt::Display for MenuItem<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let true_width = termion::terminal_size().unwrap().0 as usize;
@@ -38,7 +66,7 @@ impl fmt::Display for MenuItem<'_> {
             ),
             Self::Bar => &format!("\n{}", HORZ_BORDER.repeat(true_width))[..(true_width)],
             Self::Paragraph(text) => &format_paragraph(text, width - 1),
-            Self::SpecList(lens) => "",
+            Self::SpecList(lens) => &display_specs(lens, width),
             Self::Scale(lens) => "",
         };
 
