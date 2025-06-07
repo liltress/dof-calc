@@ -58,9 +58,9 @@ impl Format {
 #[derive(Debug)]
 pub struct Lens {
     pub name: String,
-    focal_length: f32,
-    focus_distance: f32,
-    fstop: f32,
+    pub focal_length: f32,
+    pub focus_distance: f32,
+    pub fstop: f32,
     pub format: Format,
 }
 impl Lens {

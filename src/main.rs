@@ -1,16 +1,52 @@
+use args::DofCalcArgs;
 use clap::Parser;
+use lib::core::Lens;
 
 mod args;
 mod lib;
 
 fn main() {
     let args = args::DofCalcArgs::parse();
+    let lorem_ipsum: &str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac arcu lorem. Sed aliquet nunc vehicula, congue massa sit amet, ullamcorper turpis. Maecenas cursus sapien quis tempus efficitur. Duis scelerisque velit sed bibendum aliquam. Nam sit amet venenatis purus. Mauris nisi erat, porta eget quam vitae, tempor interdum ex. Praesent mattis felis eu sem maximus, a sodales odio tincidunt. Maecenas at ultrices lectus. Etiam euismod, risus sit amet vestibulum placerat, erat eros rutrum orci, vitae vehicula ligula est sed ipsum. In vel euismod massa. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus faucibus tempus nulla, vel tempor dui molestie a. ";
+    let lens = Lens {
+        name: "placeholder".to_string(),
+        focal_length: 50.0 / 1000.,
+        focus_distance: 1.0,
+        fstop: 16.,
+        format: lib::core::Format::FF135,
+    };
+    dbg!(&args);
+    dbg!(&lens);
+    [
+        lib::menu::MenuItem::Bar,
+        lib::menu::MenuItem::Blank,
+        lib::menu::MenuItem::Paragraph(lorem_ipsum),
+        lib::menu::MenuItem::Blank,
+        lib::menu::MenuItem::SpecList(&lens),
+        lib::menu::MenuItem::Scale(&lens),
+        lib::menu::MenuItem::Bar,
+    ]
+    .iter()
+    .for_each(|mi| print!("{}", mi));
 }
 
-fn dialogue() {
+#[allow(dead_code)]
+fn dialogue(_args: DofCalcArgs) {
     todo!();
 }
 
-fn helpmenu(args: Vec<String>) {
+#[allow(dead_code)]
+fn helpmenu(_args: DofCalcArgs) {
     todo!();
+}
+
+#[allow(dead_code)]
+fn exec_once(_args: DofCalcArgs) {
+    todo!();
+}
+
+#[test]
+fn verify_cli() {
+    use clap::CommandFactory;
+    args::DofCalcArgs::command().debug_assert()
 }

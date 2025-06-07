@@ -25,6 +25,4 @@ enum Commands {
         #[arg(short, long)]
         focus: Option<f32>,
     },
-    /// Force UI to activate even when arguments are provided
-    UI {},
 }

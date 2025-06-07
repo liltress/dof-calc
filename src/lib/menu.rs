@@ -1,37 +1,47 @@
-use crate::lib::core;
+use crate::lib::core::Lens;
+use std::fmt::{self};
+use textwrap;
 
-const RIGHT_BORDER: &str = "  |";
-const LEFT_BORDER: &str = "|  ";
-const HORZ_BORDER: &str = "_";
+const RIGHT_BORDER: &str = ">>";
+const LEFT_BORDER: &str = "<<";
+const HORZ_BORDER: &str = "-";
 
-enum MenuEntry {
-    DofScale(core::Lens),
-    LensFormat(core::Lens),
-    LensSpec(String, fn(core::Lens) -> f32),
-    Submenu(String, Box<Menu>),
-    Break,
-    Border,
+#[derive(Debug)]
+pub enum MenuItem<'a> {
+    Blank,
+    Bar,
+    Paragraph(&'a str),
+    SpecList(&'a Lens),
+    Scale(&'a Lens),
 }
 
-struct Menu {
-    entries: Vec<MenuEntry>,
-    width: usize,
-}
-impl Menu {
-    fn printout(&self) {
-        for me in self.entries.iter() {}
+fn format_paragraph(text: &str, text_width: usize) -> String {
+    let mut textout = String::new();
+    for line in textwrap::wrap(text, text_width) {
+        textout.push('\n');
+        textout.push_str(LEFT_BORDER);
+        textout.push_str(&line);
+        textout.push_str(&" ".repeat(text_width - line.len()));
+        textout.push_str(RIGHT_BORDER);
     }
+    textout
 }
 
-fn boxify(message: &str, width: usize) -> String {
-    let mut out = String::new();
-    out.push_str(LEFT_BORDER);
-    out.push_str(message);
-    out.push_str(
-        &std::iter::repeat(' ')
-            .take(width - LEFT_BORDER.len() - RIGHT_BORDER.len() - message.len())
-            .collect::<String>(),
-    );
-    out.push_str(RIGHT_BORDER);
-    out
+impl fmt::Display for MenuItem<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let true_width = termion::terminal_size().unwrap().0 as usize;
+        let width: usize = true_width - LEFT_BORDER.len() - RIGHT_BORDER.len();
+        let outstr: &str = match self {
+            Self::Blank => &format!(
+                "\n{LEFT_BORDER: <w$}{RIGHT_BORDER}",
+                w = width + LEFT_BORDER.len() - 1
+            ),
+            Self::Bar => &format!("\n{}", HORZ_BORDER.repeat(true_width))[..(true_width)],
+            Self::Paragraph(text) => &format_paragraph(text, width - 1),
+            Self::SpecList(lens) => "",
+            Self::Scale(lens) => "",
+        };
+
+        write!(f, "{}", outstr)
+    }
 }
