@@ -2,8 +2,8 @@ use crate::lib::core::Lens;
 use std::fmt::{self};
 use textwrap;
 
-const RIGHT_BORDER: &str = ">>";
-const LEFT_BORDER: &str = "<<";
+const LEFT_BORDER: &str = "| ";
+const RIGHT_BORDER: &str = " |";
 const HORZ_BORDER: &str = "-";
 
 #[derive(Debug)]

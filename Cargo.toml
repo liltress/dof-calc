@@ -7,3 +7,4 @@ edition = "2021"
 clap = { version = "4.5.32", features = ["derive"] }
 lazy_static = "1.5.0"
 termion = "4.0.5"
+textwrap = "0.16.2"
