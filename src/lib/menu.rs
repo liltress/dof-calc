@@ -56,6 +56,17 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
     )
 }
 
+fn display_scale(lens: &Lens, text_width: usize) -> String {
+    let focus_field = lens.get_field_of_focus();
+    let hyperfocal = lens.get_hyperfocal_distance();
+    let least_scale = hyperfocal / text_width as f32;
+
+    let close_char = (focus_field.0 / least_scale) as i32;
+    let far_char = (focus_field.1 / least_scale) as i32;
+
+    format!("\n{hyperfocal}\n{close_char} {fn}\n{far_char} {ff}", fn=focus_field.0, ff=focus_field.1)
+}
+
 impl fmt::Display for MenuItem<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let true_width = termion::terminal_size().unwrap().0 as usize;
@@ -68,7 +79,7 @@ impl fmt::Display for MenuItem<'_> {
             Self::Bar => &format!("\n{}", HORZ_BORDER.repeat(true_width))[..(true_width)],
             Self::Paragraph(text) => &format_paragraph(text, width - 1),
             Self::SpecList(lens) => &display_specs(lens, width),
-            Self::Scale(lens) => "",
+            Self::Scale(lens) => &display_scale(lens, width),
         };
 
         write!(f, "{}", outstr)

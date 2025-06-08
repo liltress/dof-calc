@@ -22,9 +22,9 @@ lazy_static! {
     #[derive(Debug)]
     pub static ref DEFAULT_LENS: Lens = Lens {
         name: "default lens".to_string(),
-        focal_length: 50./1000.,
-        focus_distance: 1.,
-        fstop: 1.4,
+        focal_length: 50.,
+        focus_distance: 3.,
+        fstop: 16.,
         format: Format::FF135,
     };
 }
@@ -65,10 +65,10 @@ pub struct Lens {
     pub format: Format,
 }
 impl Lens {
-    fn get_circle_of_confusion(&self) -> f32 {
+    pub fn get_circle_of_confusion(&self) -> f32 {
         self.format.get_diagonal() / 1730.
     }
-    fn get_hyperfocal_distance(&self) -> f32 {
+    pub fn get_hyperfocal_distance(&self) -> f32 {
         //H  = f*f/N*c + f
         ((self.focal_length * self.focal_length) / (self.fstop * self.get_circle_of_confusion()))
             + self.focal_length
