@@ -23,7 +23,7 @@ lazy_static! {
     pub static ref DEFAULT_LENS: Lens = Lens {
         name: "default lens".to_string(),
         focal_length: 50.,
-        focus_distance: 3.,
+        focus_distance: 1000.,
         fstop: 16.,
         format: Format::FF135,
     };
@@ -91,7 +91,7 @@ impl fmt::Display for Lens {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "name: {0}\nfocal length: {1}mm\nfocus distance: {2:.2}m\nfstop: {3}\ncircle of confusion: {4:.3}mm\nhyperfocal distance: {5:.2}m\nfield of focus {6:.2}-{7:.2}m",
+            "\nname: {0}\nfocal length: {1}mm\nfocus distance: {2:.2}m\nfstop: {3}\ncircle of confusion: {4:.3}mm\nhyperfocal distance: {5:.2}m\nfield of focus: {6:.2}-{7:.2}m\ninfinity in focus: {inf}",
             self.name,
             self.focal_length,
             self.focus_distance/1000.,
@@ -99,7 +99,8 @@ impl fmt::Display for Lens {
             self.get_circle_of_confusion(),
             self.get_hyperfocal_distance()/1000.,
             self.get_field_of_focus().0/1000.,
-            self.get_field_of_focus().1/1000.
+            self.get_field_of_focus().1/1000.,
+            inf = {if self.infinity_in_focus() {"yes"} else {"no"} },
         )
     }
 }

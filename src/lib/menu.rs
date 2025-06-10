@@ -38,7 +38,7 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
     ) + &format!(
         "\n{}Focal Length: {}mm{: >w$}",
         LEFT_BORDER,
-        lens.focal_length * 1000.,
+        lens.focal_length / 1000.,
         RIGHT_BORDER,
         w = text_width - (lens.focal_length * 1000.).to_string().len() - 15
     ) + &format!(
@@ -57,14 +57,8 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
 }
 
 fn display_scale(lens: &Lens, text_width: usize) -> String {
-    let focus_field = lens.get_field_of_focus();
-    let hyperfocal = lens.get_hyperfocal_distance();
-    let least_scale = hyperfocal / text_width as f32;
-
-    let close_char = (focus_field.0 / least_scale) as i32;
-    let far_char = (focus_field.1 / least_scale) as i32;
-
-    format!("\n{hyperfocal}\n{close_char} {fn}\n{far_char} {ff}", fn=focus_field.0, ff=focus_field.1)
+    println!("{}", lens);
+    "".to_string()
 }
 
 impl fmt::Display for MenuItem<'_> {
