@@ -23,7 +23,7 @@ lazy_static! {
     pub static ref DEFAULT_LENS: Lens = Lens {
         name: "default lens".to_string(),
         focal_length: 50.,
-        focus_distance: 1000.,
+        focus_distance: 1500.,
         fstop: 16.,
         format: Format::FF135,
     };

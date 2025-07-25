@@ -30,35 +30,35 @@ fn format_paragraph(text: &str, text_width: usize) -> String {
 fn display_specs(lens: &Lens, text_width: usize) -> String {
     //! TODO refactor this
     format!(
-        "\n{}Lens Name: {: <w$}{}",
+        "\n{}{: <w$}{}",
         LEFT_BORDER,
-        lens.name,
+        "Lens Name: ".to_string() + &lens.name,
         RIGHT_BORDER,
-        w = text_width - 12
+        w = text_width - 1
     ) + &format!(
-        "\n{}Focal Length: {}mm{: >w$}",
+        "\n{}{: <w$}{}",
         LEFT_BORDER,
-        lens.focal_length / 1000.,
+        "Focal Length: ".to_string() + &lens.focal_length.to_string() + "mm",
         RIGHT_BORDER,
-        w = text_width - (lens.focal_length * 1000.).to_string().len() - 15
+        w = text_width - 1
     ) + &format!(
-        "\n{}FStop: {: <w$}{}",
+        "\n{}{: <w$}{}",
         LEFT_BORDER,
-        lens.fstop,
+        "FStop: f".to_string() + &lens.fstop.to_string(),
         RIGHT_BORDER,
-        w = text_width - 8
+        w = text_width - 1
     ) + &format!(
-        "\n{}Focused to: {:.1}m{: >w$}",
+        "\n{}{: <w$}{}",
         LEFT_BORDER,
-        lens.focus_distance,
+        "Focused to: ".to_string() + &(lens.focus_distance / 1000.0).to_string() + "m",
         RIGHT_BORDER,
-        w = text_width - 3 - 12
+        w = text_width - 1
     )
 }
 
 fn display_scale(lens: &Lens, text_width: usize) -> String {
-    println!("{}", lens);
-    "".to_string()
+    //println!("{}", lens);
+    "\n".to_string()
 }
 
 impl fmt::Display for MenuItem<'_> {
