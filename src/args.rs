@@ -19,6 +19,9 @@ pub struct DofCalcArgs {
 enum Commands {
     /// Provide your own lens in CLI. If a config is provided this will interpolate the values into it
     Override {
+        /// lens name
+        #[arg(short, long)]
+        name: Option<String>,
         /// focal length [mm]
         #[arg(short, long, value_name = "FOCAL_LENGTH")]
         length: Option<f32>,
