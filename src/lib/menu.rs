@@ -57,8 +57,26 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
 }
 
 fn display_scale(lens: &Lens, text_width: usize) -> String {
-    //println!("{}", lens);
-    "\n".to_string()
+    let hyperfocal = lens.get_hyperfocal_distance();
+    let (near, far) = lens.get_field_of_focus();
+
+    let mut scale = String::new();
+    scale += "|";
+    scale += &(0..text_width - 3).map(|_| "-").collect::<String>();
+    scale += "|";
+
+    let mut labels = String::new();
+    labels += "0m";
+    labels += &((0..text_width
+        - ((hyperfocal / 1000.).to_string() + "m").len()
+        - RIGHT_BORDER.len()
+        - 1)
+        .map(|_| " ")
+        .collect::<String>());
+    labels += &((hyperfocal / 1000.).to_string() + "m");
+
+    format!("\n{}{}{}", LEFT_BORDER, scale, RIGHT_BORDER)
+        + &format!("\n{}{}{}", LEFT_BORDER, labels, RIGHT_BORDER)
 }
 
 impl fmt::Display for MenuItem<'_> {

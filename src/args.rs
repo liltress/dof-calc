@@ -9,8 +9,10 @@ pub struct DofCalcArgs {
     path: Option<PathBuf>,
     #[command(subcommand)]
     command: Option<Commands>,
-    /// 0: Enter dialogue; 1: Print all lens info;
-    /// 2: Print scale; 3: Print near, far focus and hyperfocal distances
+    /// 0: Enter dialogue;
+    /// 1: Print all lens info;
+    /// 2: Print scale;
+    /// 3: Print near, far focus and hyperfocal distances
     #[arg(short, long)]
     verbosity: Option<u8>,
 }
