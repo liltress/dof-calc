@@ -56,24 +56,40 @@ fn display_specs(lens: &Lens, text_width: usize) -> String {
     )
 }
 
+fn round_to_n_dec(num: f32, num_dec: i32) -> f32 {
+    (num * 10.0f32.powi(num_dec)).round() / 10.0f32.powi(num_dec)
+}
+
 fn display_scale(lens: &Lens, text_width: usize) -> String {
     let hyperfocal = lens.get_hyperfocal_distance();
+    let hyperfocal_display = round_to_n_dec(hyperfocal / 1000., 2);
+    let least_scale: f32 = hyperfocal / (text_width - 3) as f32;
     let (near, far) = lens.get_field_of_focus();
+    let near_index = (near / least_scale) as i32;
+    let far_index = (far / least_scale) as i32;
 
-    let mut scale = String::new();
-    scale += "|";
-    scale += &(0..text_width - 3).map(|_| "-").collect::<String>();
-    scale += "|";
+    //println!("0 {near_index} {far_index} {tw}", tw = text_width - 3);
+
+    let mut scale = String::new()
+        + "|"
+        + &(0..near_index - 1).map(|_| "-").collect::<String>()
+        + "v"
+        + &(near_index..far_index.clamp(0, text_width as i32 - 3) - 1)
+            .map(|_| "-")
+            .collect::<String>()
+        + if lens.infinity_in_focus() { ">" } else { "v" }
+        + &(far_index.clamp(0, text_width as i32 - 3)..text_width as i32 - 3)
+            .map(|_| "-")
+            .collect::<String>()
+        + "|";
 
     let mut labels = String::new();
     labels += "0m";
-    labels += &((0..text_width
-        - ((hyperfocal / 1000.).to_string() + "m").len()
-        - RIGHT_BORDER.len()
-        - 1)
-        .map(|_| " ")
-        .collect::<String>());
-    labels += &((hyperfocal / 1000.).to_string() + "m");
+    labels +=
+        &((0..text_width - (hyperfocal_display.to_string() + "m").len() - RIGHT_BORDER.len() - 1)
+            .map(|_| " ")
+            .collect::<String>());
+    labels += &((hyperfocal_display).to_string() + "m");
 
     format!("\n{}{}{}", LEFT_BORDER, scale, RIGHT_BORDER)
         + &format!("\n{}{}{}", LEFT_BORDER, labels, RIGHT_BORDER)

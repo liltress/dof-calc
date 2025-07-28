@@ -3,7 +3,7 @@
 use lazy_static::lazy_static;
 use std::fmt;
 /*
-c  = d/1730
+c  = d/1730 //using Zeiss formula for simplicity, more sophisticated options pending
 H  = f*f/N*c + f
 Dn = s*(H - f) / (H + s - 2f)
 Df = s*(H - f) / (H - s)
