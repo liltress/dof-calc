@@ -75,15 +75,15 @@ fn display_scale(lens: &Lens, text_width: usize) -> String {
 
     let scale = String::new()
         + "|"
-        + &(0..(max(near_index, 0)) - 1)
+        + &(0..(near_index.clamp(1, text_width as i32)) - 1)
             .map(|_| "-")
             .collect::<String>()
         + "v"
-        + &(near_index..far_index.clamp(0, text_width as i32 - 3) - 1)
+        + &(near_index..far_index.clamp(2, text_width as i32 - 3) - 1)
             .map(|_| "-")
             .collect::<String>()
         + if lens.infinity_in_focus() { ">" } else { "v" }
-        + &(far_index.clamp(0, text_width as i32 - 3)..text_width as i32 - 3)
+        + &(far_index.clamp(2, text_width as i32 - 3)..text_width as i32 - 3)
             .map(|_| "-")
             .collect::<String>()
         + "|";
