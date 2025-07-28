@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 
-use lazy_static::lazy_static;
 use std::fmt;
 /*
 c  = d/1730 //using Zeiss formula for simplicity, more sophisticated options pending
@@ -17,17 +16,6 @@ N  = fstop                                   [-]
 d  = diagonal of the sensor/print            [mm]
 c  = circle of confusion                     [mm]
 */
-
-lazy_static! {
-    #[derive(Debug)]
-    pub static ref DEFAULT_LENS: Lens = Lens {
-        name: "default lens".to_string(),
-        focal_length: 50.,
-        focus_distance: 1500.,
-        fstop: 16.,
-        format: Format::FF135,
-    };
-}
 
 fn pythagorean(l1: f32, l2: f32) -> f32 {
     (l1 * l1 + l2 * l2).sqrt()
@@ -102,5 +90,16 @@ impl fmt::Display for Lens {
             self.get_field_of_focus().1/1000.,
             inf = {if self.infinity_in_focus() {"yes"} else {"no"} },
         )
+    }
+}
+impl Default for Lens {
+    fn default() -> Self {
+        Lens {
+            name: "default lens".to_string(),
+            focal_length: 50.,
+            focus_distance: 1500.,
+            fstop: 16.,
+            format: Format::FF135,
+        }
     }
 }

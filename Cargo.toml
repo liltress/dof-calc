@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.32", features = ["derive"] }
 dirs = "6.0.0"
-lazy_static = "1.5.0"
 termion = "4.0.5"
 textwrap = "0.16.2"
 toml = "0.8.23"
