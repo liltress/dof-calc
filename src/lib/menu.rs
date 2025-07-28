@@ -1,5 +1,8 @@
 use crate::lib::core::Lens;
-use std::fmt::{self};
+use std::{
+    cmp::max,
+    fmt::{self},
+};
 use textwrap;
 
 const LEFT_BORDER: &str = "| ";
@@ -72,7 +75,9 @@ fn display_scale(lens: &Lens, text_width: usize) -> String {
 
     let scale = String::new()
         + "|"
-        + &(0..near_index - 1).map(|_| "-").collect::<String>()
+        + &(0..(max(near_index, 0)) - 1)
+            .map(|_| "-")
+            .collect::<String>()
         + "v"
         + &(near_index..far_index.clamp(0, text_width as i32 - 3) - 1)
             .map(|_| "-")
