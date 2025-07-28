@@ -70,7 +70,7 @@ fn display_scale(lens: &Lens, text_width: usize) -> String {
 
     //println!("0 {near_index} {far_index} {tw}", tw = text_width - 3);
 
-    let mut scale = String::new()
+    let scale = String::new()
         + "|"
         + &(0..near_index - 1).map(|_| "-").collect::<String>()
         + "v"
@@ -83,13 +83,15 @@ fn display_scale(lens: &Lens, text_width: usize) -> String {
             .collect::<String>()
         + "|";
 
-    let mut labels = String::new();
-    labels += "0m";
-    labels +=
-        &((0..text_width - (hyperfocal_display.to_string() + "m").len() - RIGHT_BORDER.len() - 1)
+    let labels = String::new()
+        + "0m"
+        + &((0..text_width
+            - (hyperfocal_display.to_string() + "m").len()
+            - RIGHT_BORDER.len()
+            - 1)
             .map(|_| " ")
-            .collect::<String>());
-    labels += &((hyperfocal_display).to_string() + "m");
+            .collect::<String>())
+        + &((hyperfocal_display).to_string() + "m");
 
     format!("\n{}{}{}", LEFT_BORDER, scale, RIGHT_BORDER)
         + &format!("\n{}{}{}", LEFT_BORDER, labels, RIGHT_BORDER)

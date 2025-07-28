@@ -6,15 +6,15 @@ use std::path::PathBuf;
 pub struct DofCalcArgs {
     /// Provide a TOML config for the lens
     #[arg(short, long, value_name = "FILE")]
-    path: Option<PathBuf>,
+    pub path: Option<PathBuf>,
     #[command(subcommand)]
-    command: Option<Commands>,
+    pub command: Option<Commands>,
     /// 0: Enter dialogue;
     /// 1: Print all lens info;
     /// 2: Print scale;
     /// 3: Print near, far focus and hyperfocal distances
     #[arg(short, long)]
-    verbosity: Option<u8>,
+    pub verbosity: Option<u8>,
 }
 
 #[derive(Subcommand, Debug)]
