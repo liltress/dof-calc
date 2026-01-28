@@ -1,37 +1,52 @@
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
-
 #[derive(Debug, Parser)]
 #[clap(author, version, about)]
 pub struct DofCalcArgs {
-    /// Provide a TOML config for the lens
-    #[arg(short, long, value_name = "FILE")]
-    pub path: Option<PathBuf>,
     #[command(subcommand)]
     pub command: Option<Commands>,
-    /// 0: Enter dialogue;
-    /// 1: Print all lens info;
-    /// 2: Print scale;
-    /// 3: Print near, far focus and hyperfocal distances
-    #[arg(short, long)]
-    pub verbosity: Option<u8>,
+
+    /// Saves the lens used in cli instance to specified path
+    #[arg(long, short, value_name = "FILE OUT")]
+    pub path_out: Option<PathBuf>,
+
+    /// overrides values passed in through file or preset
+    #[arg(long)]
+    pub with_name: Option<String>,
+    #[arg(long)]
+    /// [mm]
+    pub with_fl: Option<f32>,
+    #[arg(long)]
+    pub with_fstop: Option<f32>,
+    /// [m] from sensor plane
+    #[arg(long)]
+    pub with_fd: Option<f32>,
+    #[arg(long)]
+    pub with_description: Option<String>,
+    #[arg(long)]
+    pub with_artwork: Option<String>,
+
+    /// shows optional ui elements
+    #[arg(long)]
+    pub show_artwork: bool,
+    #[arg(long)]
+    pub show_misc: bool,
+    #[arg(long)]
+    pub show_description: bool,
+
+    /// hides default ui elements
+    #[arg(long)]
+    pub hide_spec: bool,
+    #[arg(long)]
+    pub hide_scale: bool,
 }
 
-#[derive(Subcommand, Debug)]
-enum Commands {
-    /// Provide your own lens in CLI. If a config is provided this will interpolate the values into it
-    Override {
-        /// lens name
-        #[arg(short, long)]
-        name: Option<String>,
-        /// focal length [mm]
-        #[arg(short, long, value_name = "FOCAL_LENGTH")]
-        length: Option<f32>,
-        /// aperture
-        #[arg(short, long, value_name = "FSTOP")]
-        aperture: Option<f32>,
-        /// the distance [m] (from the sensor) the lens is focused to
-        #[arg(short, long)]
-        focus: Option<f32>,
-    },
+#[derive(Subcommand, Debug, PartialEq)]
+pub enum Commands {
+    /// load lens from file File { path: PathBuf },
+    File { path: PathBuf },
+    /// Use a built-in lens
+    Preset { name: String },
+    /// Shows avaliable built-in lenses
+    ShowPresets,
 }
