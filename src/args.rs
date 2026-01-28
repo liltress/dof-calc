@@ -6,21 +6,23 @@ pub struct DofCalcArgs {
     #[command(subcommand)]
     pub command: Option<Commands>,
 
-    /// Saves the lens used in cli instance to specified path
+    /// Saves the lens after all interpolations into specified file
     #[arg(long, short, value_name = "FILE OUT")]
     pub path_out: Option<PathBuf>,
+    /// When writing to file, replace contents of existing ones
+    #[arg(long, short)]
+    pub force: bool,
 
     /// overrides values passed in through file or preset
-    #[arg(long)]
-    pub with_name: Option<String>,
-    #[arg(long)]
-    /// [mm]
+    /// [mm] focal length
     pub with_fl: Option<f32>,
     #[arg(long)]
     pub with_fstop: Option<f32>,
-    /// [m] from sensor plane
+    /// [m] distance between sensor plane and focus plane
     #[arg(long)]
     pub with_fd: Option<f32>,
+    #[arg(long)]
+    pub with_name: Option<String>,
     #[arg(long)]
     pub with_description: Option<String>,
     #[arg(long)]
@@ -28,11 +30,11 @@ pub struct DofCalcArgs {
 
     /// shows optional ui elements
     #[arg(long)]
+    pub show_description: bool,
+    #[arg(long)]
     pub show_artwork: bool,
     #[arg(long)]
     pub show_misc: bool,
-    #[arg(long)]
-    pub show_description: bool,
 
     /// hides default ui elements
     #[arg(long)]

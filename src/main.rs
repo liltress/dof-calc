@@ -1,12 +1,14 @@
 #![allow(special_module_name)]
+use std::io;
 use std::process::exit;
 
 use crate::args::{Commands, DofCalcArgs};
 use crate::lib::core::*;
 use clap::Parser;
-use serde_json::to_string_pretty;
+use serde_json::{from_str, to_string_pretty};
 
-use std::path::{Path, PathBuf};
+use std::fs::{exists, read_to_string, write};
+use std::path::Path;
 
 mod args;
 mod lib;
@@ -24,22 +26,45 @@ fn main() {
         Some(Commands::ShowPresets) => unreachable!(),
 
         None => Lens::from_specs(50., 1000., 16.),
-        Some(Commands::File { path: _ }) => Lens::from_specs(1., 1., 1.),
+
+        Some(Commands::File { path: p }) => {
+            let l: Lens = from_str(&read_file(p)).expect("failed to parse json");
+            l
+        }
         Some(Commands::Preset { name: _ }) => Lens::from_specs(2., 2., 2.),
     };
-    lens.with_name("nifty 50".to_string())
-        .with_description("ol' reliable".to_string());
     interpolate_args(&mut lens, &args);
     dbg!(&lens);
 
     if let Some(path) = &args.path_out {
         let json = to_string_pretty(&lens).unwrap();
-        write_file(path);
+        let _ = write_file(path, json, &args);
     }
 }
 
-fn write_file(path: &Path) {
-    todo!();
+fn read_file(path: &Path) -> String {
+    read_to_string(path).expect("failed to read file")
+}
+
+fn write_file(path: &Path, contents: String, args: &DofCalcArgs) -> Result<(), &'static str> {
+    if path.is_relative() {
+        println!("This is a relative path, please use absolute path");
+        return Err("relativepath");
+    } else if path.ancestors().any(|a| !a.exists()) {
+        println!("Directory this file would be written to does not exist");
+        return Err("noparent");
+    } else if path.exists() && !args.force {
+        println!("Attempted to write file {:#?} but it already exists", &path);
+        println!("Hint: if you want to overwrite it, use -f or --force");
+        return Err("needforce");
+    } else if path.exists() && !path.is_file() {
+        println!("Attempted to write to {:#?} but it is not a file", &path);
+        return Err("nonfile");
+    }
+
+    println!("writing to file!");
+    write(path, contents).unwrap();
+    Ok(())
 }
 
 fn interpolate_args(lens: &mut Lens, args: &DofCalcArgs) {
